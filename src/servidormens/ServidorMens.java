@@ -7,11 +7,8 @@ package servidormens;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -55,23 +52,23 @@ public class ServidorMens {
 
         //Cambiamos el puerto para que pueda entrar el proximo cliente sin que se ocupe por varios.
         System.out.println("Conexion recibida");
-
+        
+        //abrimos flujo de salida de datos con el cliente
         PrintStream salida = new PrintStream(new BufferedOutputStream(newSocket.getOutputStream()));
 
         //abrimos flujo de recogida de datos con cliente
         DataInputStream entrada = new DataInputStream(new BufferedInputStream(newSocket.getInputStream()));
-        //abrimos flujo de recogida de datos con cliente
-
-        /*while ((mensaje = entrada.readLine()) != null) {
-            System.out.println(mensaje);
-        }*/
+       
         String entradaCli;
         
+        //Bucle que mientras el cliente tenga mensajes el server escuchará
         while((entradaCli=entrada.readLine())!=null){
             System.out.println("Mensaje del cliente: "+entradaCli);
+            //Cuando el mensaje use la palabra clave enviada por el cliente sea adios el server se cerrara rompiendo el bucle
                 if(entradaCli.equals("adios")){
                     break;
                 }
+            //mensaje del servidor cara el cliente   
             String mensaje = JOptionPane.showInputDialog("Introduzca el mensaje del servidor");
             salida.println(mensaje);
             System.out.println("Mensaje del servidor: "+mensaje);
@@ -80,14 +77,11 @@ public class ServidorMens {
             
             
         }
-       
+        
+        //cerramos flujos de entra y salida
         salida.close();
         entrada.close();
             
-            
-            //enviamos los datos al cliente
-        
-
         System.out.println("Cerrando el nuevo socket");
         //cerramos el Scoket
         newSocket.close();
